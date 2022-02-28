@@ -176,42 +176,54 @@ public class MovieCollection
                 boolean canAdd = true;
                 for(int w = 0; w < actors.size();w++)
                 {
-                    if(actors.get(w).equals(listo[d]) && actors.get(w).contains(searchTerm))
+                    if(actors.get(w).contains(listo[d]))
                     {
                         canAdd = false;
                     }
                 }
-                if(canAdd)
+                if(canAdd && listo[d].contains(searchTerm))
                 {
                     actors.add(listo[d]);
                 }
             }
         }
         Sort.selectionSortWordList(actors);
+        int counter = 1;
         for(int i = 0; i < actors.size();i++)
         {
-            System.out.println(i + 1 + " " + actors.get(i));
+            System.out.println( counter + ". " + actors.get(i));
+            counter++;
         }
-        System.out.println("Which actor's movies would you like to view?");
+        System.out.println("Which actor's movie would you like to view?");
         System.out.print("Enter number: ");
-
         int choice = scanner.nextInt();
         scanner.nextLine();
-
         String selectedActor = actors.get(choice - 1);
-        Movie selected = null;
+        ArrayList<Movie> selected = new ArrayList<Movie>();
         for(int i = 0; i < movies.size();i++)
         {
             if(movies.get(i).getCast().toLowerCase().contains(selectedActor))
             {
-                selected = movies.get(i);
-                i += movies.size();
+                selected.add(movies.get(i));
             }
         }
-        displayMovieInfo(selected);
-        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        int county = 1;
+        for(int i = 0; i < selected.size();i++)
+        {
+            System.out.println(county + ". " + selected.get(i).getTitle());
+            county++;
+        }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice2 = scanner.nextInt();
         scanner.nextLine();
 
+        Movie selectedMovie = selected.get(choice2 - 1);
+
+        displayMovieInfo(selectedMovie);
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
     }
 
     private void searchKeywords()
@@ -231,7 +243,7 @@ public class MovieCollection
             String keyword = movies.get(i).getKeywords();
             keyword = keyword.toLowerCase();
 
-            if (keyword.indexOf(searchTerm) != -1)
+            if (keyword.contains(searchTerm))
             {
                 //add the Movie objest to the results list
                 results.add(movies.get(i));
@@ -264,8 +276,6 @@ public class MovieCollection
 
         System.out.println("\n ** Press Enter to Return to Main Menu **");
         scanner.nextLine();
-
-
     }
 
     private void listGenres()
